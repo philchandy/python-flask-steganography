@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steganography</title>
+    <link href="{{ url_for('static', filename= 'styles/style.css')}}" rel="stylesheet" />
+</head>
+<body>
+    <h1>Steganography Tool</h1>
+    <h2>Hide Text in Image</h2>
+    <form action="/hide_text" method="post" enctype="multipart/form-data">
+        <label for="image">Choose an image:</label>
+        <input type="file" id="image" name="image" accept="image/*" required>
+        <br><br>
+        <label for="text">Enter text to hide:</label>
+        <textarea id="text" name="text" rows="4" cols="50" required></textarea>
+        <br><br>
+        <button type="submit">Hide Text</button>
+    </form>
+    <br>
+    <h2>Extract Text from Image</h2>
+    <form action="/extract_text" method="post" enctype="multipart/form-data">
+        <label for="imageExtract">Choose an image:</label>
+        <input type="file" id="imageExtract" name="image" accept="image/*" required>
+        <br><br>
+        <input type="number" name="length" placeholder="Enter length of hidden text" required>
+        <button type="submit">Extract Text</button>
+    </form>
+</body>
+</html>

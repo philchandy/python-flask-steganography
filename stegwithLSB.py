@@ -17,18 +17,16 @@ def show_text(text): #gui for extracted text output
 
     root.mainloop()
 
-def hideFileInImage(imagePath, filePath, outputImage):
+def hideFileInImage(imagePath, text, output_stream):
 
     #read image as array
     img = Image.open(imagePath)
     data = np.array(img)
 
     #read file
-    with open(filePath, 'rb') as file:
-        fileData = file.read()
 
     #convert file text to binary
-    binaryData = ''.join(format(byte,'08b') for byte in fileData)
+    binaryData = ''.join([format(ord(i),'08b') for i in text]) + '00000000'
 
     #check if file size is bigger than image
     if len(binaryData) > (data.size):
@@ -46,9 +44,9 @@ def hideFileInImage(imagePath, filePath, outputImage):
     newData = flatData.reshape(data.shape)
 
     newImage = Image.fromarray(newData.astype('uint8'))
-    newImage.save(outputImage)
+    newImage.save(output_stream, format='PNG')
 
-def extractFileFromImage(stegImage):
+def extractFileFromImage(stegImage, userLength):
 
     img = Image.open(stegImage)
     data = np.array(img)
@@ -57,20 +55,14 @@ def extractFileFromImage(stegImage):
     flatData = data.flatten()
 
     #take lsb from each pixel
-    binaryData = [str(flatData[i] & 1) for i in range(flatData.size)]
+    binaryData = [str(flatData[i] & 1) for i in range(userLength * 8)]
 
     #convert binary to bytes (pixel values)
     byteData = bytearray()
     for i in range(0, len(binaryData), 8):
         byteData.append(int("".join(binaryData[i:i+8]), 2))
 
-    #Output text to tkinter gui
-    show_text(byteData.decode(errors='ignore')) 
-
-    # with open(outputFile, 'wb') as outputFile:
-    #     outputFile.write(byteData)
-
-    print("Hidden file extracted successfully.")
+    return(byteData.decode(errors='ignore')) 
 
 def enhanceDifferenceInImage(originalImage, hiddenImage, differencePath):
     #use to see the changes being made to the image
@@ -127,4 +119,5 @@ def main():
     root.mainloop()
 
 
-main()
+if __name__ == "__main__":
+    main()

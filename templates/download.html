@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="{{ url_for('static', filename= 'styles/style.css')}}" rel="stylesheet" />
+    <title>Download Image</title>
+</head>
+<body>
+    <h1>Your Image is Ready</h1>
+    <p>The image with the hidden text is displayed below. Click the button to download it.</p>
+
+    <!-- Display the output image -->
+    <img src="{{ url_for('static', filename='uploads/' + filename) }}" alt="Output Image">
+
+    <!-- Button to download the image -->
+    <div class="download-button">
+        <a href="{{ url_for('download_image', filename=filename) }}">
+            <button>Download Image</button>
+        </a>
+    </div>
+
+    <br>
+    <a href="/">Go Back</a>
+</body>
+</html>
