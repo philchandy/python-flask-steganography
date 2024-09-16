@@ -1,10 +1,13 @@
-from flask import Flask, render_template, request, redirect, url_for, send_file
+from flask import Flask, render_template, request, redirect, url_for, send_file, jsonify
 from waitress import serve
 from stegwithLSB import hideFileInImage, extractFileFromImage
 from io import BytesIO
 import os 
+from flask_cors import CORS
+import base64
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS
 
 # Define the upload folder path
 UPLOAD_FOLDER = 'static/uploads'
@@ -23,7 +26,7 @@ def index():
 @app.route('/hide_text', methods=['POST'])
 def hide_text():
     if 'image' not in request.files or 'text' not in request.form:
-        return "No image or text provided", 400
+        return jsonify({"No image or text provided"}), 400
     
     image = request.files['image']
     text_to_hide = request.form['text']
@@ -34,30 +37,31 @@ def hide_text():
 
         output_image.seek(0)  # Rewind the file pointer
 
-        # Save the output image to the temporary folder
-        output_image_path = os.path.join(app.config['UPLOAD_FOLDER'], 'output_image.png')
-        with open(output_image_path, 'wb') as f:
-            f.write(output_image.read())
+        base64_image = base64.b64encode(output_image.read()).decode('utf-8')
 
-        # redirect to download page
-        return redirect(url_for('download_page', filename='output_image.png'))
+        return jsonify({
+            "message": "Text hidden successfully!",
+            "filename": 'output_image.png',
+            "image": base64_image
+        }), 200
 
     except Exception as e:
-        return f"An error occurred: {e}", 500
+        # return f"An error occurred: {e}", 500
+        return jsonify({f"An error occurred: {e}"}), 500
 
 # Route to handle extracting text from image
 @app.route('/extract_text', methods=['POST'])
 def extract_text():
     if 'image' not in request.files:
-        return "No image provided", 400
+        return jsonify({"error": "No image provided"}), 400
     
     image = request.files['image']
     try:
         user_length = int(request.form['length'])
         hidden_text = extractFileFromImage(image, user_length)
-        return render_template('extracted_text.html', text=hidden_text)
+        return jsonify({"text": hidden_text}), 200
     except Exception as e:
-        return f"An error occurred: {e}", 500
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/download/<filename>')
 def download_page(filename):

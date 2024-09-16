@@ -13,11 +13,10 @@
     <img src="{{ url_for('static', filename='uploads/' + filename) }}" alt="Output Image">
 
     <!-- Button to download the image -->
-    <div class="download-button">
-        <a href="{{ url_for('download_image', filename=filename) }}">
-            <button>Download Image</button>
-        </a>
-    </div>
+    <br>
+    <a href="{{ url_for('download_image', filename=filename) }}" download="{{ filename }}">
+        <button>Download Image</button>
+    </a>
 
     <br>
     <a href="/">Go Back</a>
