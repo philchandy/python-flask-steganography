@@ -76,7 +76,6 @@ def download_image(filename):
     return send_file(file_path, mimetype='image/png', as_attachment=True, download_name=filename)
 
 if __name__ == '__main__':
-    try:
-        serve(app, host='0.0.0.0', port=3000)
-    except Exception as e:
-        print(f"An error occurred: {e}", 500)
+    print(f"server is running at 0.0.0.0:3000")
+    serve(app, host='0.0.0.0', port=3000)
+    
