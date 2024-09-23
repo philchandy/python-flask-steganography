@@ -1,6 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./public/**/*.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+  content: [
+    './public/**/*.html', './src/**/*.{vue,js,ts,jsx,tsx}',
+    'node_modules/flowbite-vue/**/*.{js,jsx,ts,tsx,vue}',
+    'node_modules/flowbite/**/*.{js,jsx,ts,tsx}',
+  ],
   theme: {
     screens: {
       sm: "375px",
@@ -21,10 +25,11 @@ module.exports = {
       },
       backgroundImage: {
         'grainImage':'url("/src/assets/grain.jpg")',
-        'app-background':'url("/src/assets/image-bg.jpg")'
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('flowbite/plugin')
+  ],
 };
 

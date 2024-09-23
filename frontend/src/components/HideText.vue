@@ -1,9 +1,5 @@
 <template>
-    <div class="container sm:min-w-full md:min-w-0">
-        <button @click="$emit('back')" class=" absolute left-5 top-5 mx-auto gap-2 text-blue-500 h-12 px-6 rounded-xl mb-4 flex flew-row justify-center items-center bg-white/90 border border-gray-600 shadow-xl">
-            <img src="@/assets/arrow-left.svg" class="size-4" alt="Back" />
-            <span>Back to Homepage</span>
-        </button>
+    <div class="container  text-white sm:min-w-full md:min-w-0">
         
         <div class="flex justify-center flex-col items-center mt-10  bg-white/90 border rounded-xl p-6 py-10 shadow-2xl sm:mt-20 ">
             <p className="uppercase font-semibold tracking-widest text-gray-800 bg-clip-text p-6 sm:p-3">
@@ -32,7 +28,7 @@
                     
                 </form>
             </div>
-            <div  v-if="image"  class="inline-flex items-center p-3">
+            <div  v-if="imageData"  class="inline-flex items-center p-3">
                 <a  :href="'data:image/png;base64,' + imageData" download="output_image.png">
                     <button class=" border border-white/15 bg-blue-900/80 text-white h-12 px-6 rounded-xl ">Download Image</button>
                 </a>
@@ -70,7 +66,7 @@ export default {
 
             // I <3 Axios
             try {
-                const response = await axios.post("http://localhost:3000/hide_text", formData);
+                const response = await axios.post("/api/hide_text", formData);
                 console.log("DATA:", response.data);
                 
                 if (response.data.filename && response.data.image) {

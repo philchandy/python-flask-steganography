@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, send_file, jsonify
+from flask import Flask, render_template, request, redirect, url_for, send_file, jsonify, send_from_directory
 from waitress import serve
 from stegwithLSB import hideFileInImage, extractFileFromImage
 from io import BytesIO
@@ -6,28 +6,35 @@ import os
 from flask_cors import CORS
 import base64
 
-app = Flask(__name__)
-CORS(app)  # Enable CORS
+app = Flask(__name__, static_folder='../frontend/dist', template_folder='../frontend/dist')  
+CORS(app)  
 
-# Define the upload folder path
+
 UPLOAD_FOLDER = 'static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# Ensure the upload folder exists
+
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
-@app.route('/')
-@app.route('/index')
-def index():
+@app.route('/static/<path:path>')
+def send_static_files(path):
+    return send_from_directory(app.static_folder, path)
+
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def index(path):
+    if path and (path.startswith('js') or path.startswith('css') or path.startswith('img')):
+        return send_from_directory(app.static_folder, path)
     return render_template('index.html')
 
 
-@app.route('/hide_text', methods=['POST'])
+@app.route('/api/hide_text', methods=['POST'])
 def hide_text():
     if 'image' not in request.files or 'text' not in request.form:
-        return jsonify({"No image or text provided"}), 400
-    
+        return jsonify({"error": "No image or text provided"}), 400
+
     image = request.files['image']
     text_to_hide = request.form['text']
 
@@ -46,15 +53,14 @@ def hide_text():
         }), 200
 
     except Exception as e:
-        # return f"An error occurred: {e}", 500
-        return jsonify({f"An error occurred: {e}"}), 500
+        return jsonify({"error": f"An error occurred: {e}"}), 500
 
-# Route to handle extracting text from image
-@app.route('/extract_text', methods=['POST'])
+
+@app.route('/api/extract_text', methods=['POST'])
 def extract_text():
     if 'image' not in request.files:
         return jsonify({"error": "No image provided"}), 400
-    
+
     image = request.files['image']
     try:
         user_length = int(request.form['length'])
@@ -63,9 +69,6 @@ def extract_text():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/download/<filename>')
-def download_page(filename):
-    return render_template('download.html', filename=filename)
 
 @app.route('/download_image/<filename>')
 def download_image(filename):
@@ -75,7 +78,5 @@ def download_image(filename):
 if __name__ == '__main__':
     try:
         serve(app, host='0.0.0.0', port=3000)
-        
     except Exception as e:
         print(f"An error occurred: {e}", 500)
-    

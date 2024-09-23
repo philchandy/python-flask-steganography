@@ -1,45 +1,29 @@
 <template>
-  <div id="app" class="bg-app-background relative z-0 overflow-x-clip">
-    <div class=" absolute flex flex-col min-h-screen inset-0 bg-grainImage opacity-35 -z-30"></div>
+  <div id="app" class="bg-gradient-to-b from-black via-[#200D42] via-34% via-[#4F21A1] via-65% to-[#A46EDB] to-82% relative z-0 overflow-x-clip">
+    <div class=" absolute flex flex-col min-h-screen inset-0 bg-grainImage opacity-15 -z-30"></div>
     <div class="flex flex-col min-h-screen">
-      <div class="flex-grow">
-        <HeroSection v-if="currentView === 'home'" @selectForm="handleFormSelection" />
-        <HideText v-if="currentView === 'hideText'" @back="showHome" />
-        <ExtractText v-if="currentView === 'extractText'" @back="showHome" />
+      <NavSection />
+      <div class="flex flex-1">
+        <router-view></router-view>
       </div>
+      
       <FooterSection />
     </div>
   </div>
 </template>
 
 <script>
-import ExtractText from './components/ExtractText.vue';
 import FooterSection from './components/FooterSection.vue';
-import HeroSection from './components/HeroSection.vue';
-import HideText from './components/HideText.vue';
+import NavSection from './components/NavSection.vue';
 
 export default {
   name: 'App',
   components: {
-    HeroSection,
-    ExtractText,
-    HideText,
-    FooterSection
+    FooterSection,
+    NavSection,
   },
-  data() {
-    return {
-      currentView:'home',
-    };
-  },
-  methods: {
-    handleFormSelection(formType) {
-      console.log("form selected:", formType)
-      this.currentView = formType
-    },
-    showHome(){
-      this.currentView = 'home'
-    },
-  },
+  data() {},
+  methods: {},
 };
 </script>
 
