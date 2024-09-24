@@ -8,12 +8,12 @@
             <p className="font-serif font-semibold bg-clip-text mb-4 sm:-mb-3 text-blue-500/70">
                 Step {{ image ? '2' : '1' }} / 2
             </p>
-            <div class="border border-gray-800 rounded sm:border-none p-6 flex items-center flex-col mb-2 sm:text-left sm:gap-2">
+            <div class="border border-gray-800 rounded sm:border-none p-6 flex items-center flex-wrap flex-col mb-2 sm:text-left sm:gap-2">
                 <form @submit.prevent="hideTextInImage">
                     <div>
                         <label for="image" class="font-semibold mr-2 text-gray-800 mb-3 sm:p-2">Upload an Image: </label>
                         <input 
-                            class="border border-gray-900 rounded-xl bg-gray-500 p-3 " 
+                            class="border border-gray-900 rounded-xl bg-gray-500 p-3 w-full" 
                             type="file" 
                             @change="handleImageUpload" 
                             accept="image/png, image/jpeg"
@@ -29,8 +29,8 @@
                 </form>
             </div>
             <div  v-if="imageData"  class="inline-flex items-center p-3">
-                <a  :href="'data:image/png;base64,' + imageData" download="output_image.png">
-                    <button class=" border border-white/15 bg-blue-900/80 text-white h-12 px-6 rounded-xl ">Download Image</button>
+                <a @click="downloadImage">
+                    <button class="border border-white/15 bg-blue-900/80 text-white h-12 px-6 rounded-xl">Download Image</button>
                 </a>
             </div>
         </div>
@@ -78,7 +78,35 @@ export default {
             } catch (error) {
                 console.error("Error hiding text in image:", error);
             }
-        }
+        },
+        downloadImage() {
+            if (!this.imageData) {
+                alert('No image to download.');
+                return;
+            }
+            
+            // Convert the base64 string back into Blob
+            const byteString = atob(this.imageData.split(',')[1]);
+            const mimeString = this.imageData.split(',')[0].split(':')[1].split(';')[0];
+
+            const ab = new ArrayBuffer(byteString.length);
+            const ia = new Uint8Array(ab);
+            for (let i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+
+            const blob = new Blob([ab], { type: mimeString });
+
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute('download', 'output_image.png'); 
+
+            document.body.appendChild(link);
+
+            link.click();
+
+            document.body.removeChild(link);
+        },
     }
 };
 </script>

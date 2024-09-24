@@ -8,12 +8,12 @@
             <p className="font-serif font-semibold bg-clip-text mb-4 sm:-mb-3 text-blue-500/70">
                 Step {{ image ? '2' : '1' }} / 2
             </p>
-            <div class="border border-gray-800 rounded sm:border-none p-6 flex items-center flex-col mb-2 sm:text-left sm:gap-2">
+            <div class="border border-gray-800 rounded sm:border-none p-6 flex items-center flex-wrap flex-col mb-2 sm:text-left sm:gap-2">
                 <form @submit.prevent="extractText">
                     <div>
                         <label for="image" class="font-semibold mr-2 text-gray-800 mb-3 sm:p-2">Upload an Image: </label>
                         <input 
-                            class="border border-gray-900 rounded-xl bg-gray-500 p-3 " 
+                            class="border border-gray-900 rounded-xl bg-gray-500 p-3 w-full" 
                             type="file" 
                             @change="handleImageUpload" 
                             accept="image/png, image/jpeg"

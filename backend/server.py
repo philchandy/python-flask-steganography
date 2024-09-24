@@ -46,10 +46,12 @@ def hide_text():
 
         base64_image = base64.b64encode(output_image.read()).decode('utf-8')
 
+        base64_image_with_prefix = f"data:image/png;base64,{base64_image}"
+
         return jsonify({
             "message": "Text hidden successfully!",
             "filename": 'output_image.png',
-            "image": base64_image
+            "image": base64_image_with_prefix
         }), 200
 
     except Exception as e:

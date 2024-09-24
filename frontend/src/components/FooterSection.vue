@@ -35,7 +35,7 @@
         footerLinks: [
           { title: 'Github', href: 'https://github.com/philchandy', img:githubIcon },
           { title: 'Linkedin', href: 'https://www.linkedin.com/in/phillipchandy/', img:linkedinIcon },
-          { title: 'Website', href: '#', img:websiteIcon },
+          { title: 'Website', href: 'https://phillipchandy.vercel.app/', img:websiteIcon },
         ]
       };
     }
