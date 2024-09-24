@@ -16,7 +16,7 @@
                             class="border border-gray-900 rounded-xl bg-gray-500 p-3 w-full" 
                             type="file" 
                             @change="handleImageUpload" 
-                            accept="image/png, image/jpeg"
+                            accept="image/png, image/jpeg, .heic"
                             required />
                     </div>
                     <div v-if="image" class="flex flex-col mt-4" >
@@ -58,6 +58,12 @@ export default {
         async hideTextInImage() {
             if (!this.image || !this.textToHide) {
                 alert('Please upload an image and enter text.');
+                return;
+            }
+             // Check for allowed image types (PNG and JPEG)
+            const allowedTypes = ['image/png', 'image/jpeg'];
+            if (!allowedTypes.includes(this.image.type)) {
+                alert('Please upload a valid image file (PNG or JPEG).');
                 return;
             }
             const formData = new FormData();

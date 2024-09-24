@@ -74,6 +74,11 @@ export default {
                 this.errorMessage = 'Please upload an image and enter a valid length.';
                 return;
             }
+            const allowedTypes = ['image/png', 'image/jpeg'];
+            if (!allowedTypes.includes(this.image.type)) {
+                alert('Please upload a valid image file (PNG or JPEG).');
+                return;
+            }
 
             const formData = new FormData();
             formData.append("image", this.image);
