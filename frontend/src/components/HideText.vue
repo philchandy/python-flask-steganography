@@ -23,9 +23,8 @@
                         <label for="text" class=" text-left text-gray-800">Text to hide:</label>
                         <textarea v-model="textToHide" class="border  border-gray-900 text-black rounded-md mb-4 mt-2 p-2" required></textarea>
 
-                        <button type="submit" class="mx-auto gap-2 border border-white/15 bg-gray-900 text-white h-12 px-6 rounded-xl" >Hide Text</button>
+                        <button type="submit" class="mx-auto gap-2 border border-white/15 bg-gray-900 text-white h-12 px-6 rounded-xl z-10 " >Hide Text</button>
                     </div>
-                    
                 </form>
             </div>
             <div  v-if="imageData"  class="inline-flex items-center p-3">
